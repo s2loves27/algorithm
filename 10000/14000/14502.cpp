@@ -6,6 +6,8 @@ int map[10][10];
 bool ch_map[10][10];
 int count = 3;
 int result;
+int dx[4] = {-1,1,0,0};
+int dy[4] = {0,0,-1,1};
 struct birus{
 	int x;
 	int y;
@@ -21,25 +23,14 @@ bool ch(int a){
 int f3(int x,int y){
 	
 	if(ch_blank <= 0) return 0;
-	if(ch(map[x][y-1]) && (!ch_map[x][y-1])){
-		ch_map[x][y-1] = true;
-		ch_blank--;
-		f3(x,y-1);
-	}
-	if(ch(map[x][y+1]) && (!ch_map[x][y+1])){
-		ch_map[x][y+1] = true;
-		ch_blank--;
-		f3(x,y+1);
-	}
-	if(ch(map[x-1][y]) && (!ch_map[x-1][y])){
-		ch_map[x-1][y] = true;
-		ch_blank--;
-		f3(x-1,y);
-	}
-	if(ch(map[x+1][y]) && (!ch_map[x+1][y])){
-		ch_map[x+1][y] = true;
-		ch_blank--;
-		f3(x+1,y);
+	for(int i = 0 ; i < 4 ; i++){
+		int xx = x + dx[i];
+		int yy = y + dy[i];
+		if(ch(map[xx][yy]) && !ch_map[xx][yy]){
+			ch_map[xx][yy] = true;
+			ch_blank--;
+			f3(xx,yy);
+		}
 	}
 
 }
@@ -64,7 +55,7 @@ int max(int a , int b){
 	if(a>b) return a;
 	else return b;
 }
-void f1(int x,int y){
+void f1(){
 	
 	if(count == 0) {
 		result = max(result,f2());
@@ -75,11 +66,12 @@ void f1(int x,int y){
 			if(map[i+1][j+1] == 0){
 				count--;
 				map[i+1][j+1] = 1;
-				f1(i+1,j+1);
+				f1();
 				map[i+1][j+1] = 0;
 				count++;
 			}
 		}	
+
 	}
 
 
@@ -107,7 +99,7 @@ int main(){
 		}
 	}
 	blank -=3;
-	f1(1,1);
+	f1();
 
 	printf("%d\n",result);
 	return 0;
